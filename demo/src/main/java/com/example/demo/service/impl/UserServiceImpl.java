@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.request.LoginRequestDto;
 import com.example.demo.dto.request.RegisterRequestDto;
 import com.example.demo.dto.response.UserResponseDto;
 import com.example.demo.entity.Role;
@@ -33,4 +34,18 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
         return users;
     }
+
+    @Override
+    public UserResponseDto login(LoginRequestDto request) {
+       User user=userRepository.findByUsername(request.getUsername())
+               .orElseThrow(() -> new RuntimeException("Username not found"));
+
+       if(!user.getPassword().equals(request.getPassword())){
+            throw new RuntimeException("Wrong password");
+       }
+
+       return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+    }
+
 }
+

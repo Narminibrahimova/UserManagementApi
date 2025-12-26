@@ -32,6 +32,7 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully");
     }
 
+
     @GetMapping("/getUserById/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         UserResponseDto userResponse = userService.getUserById(id);

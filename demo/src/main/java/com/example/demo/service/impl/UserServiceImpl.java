@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
     //modelmapper-entityni dtoya cevirmek ucun istifade olunur
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
     @Override
     public UserResponseDto register (RegisterRequestDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
         //passwordEncoder.encode() → onu kilidləyir (hash) → $2a$10$...
         //user.setPassword() → database-ə hash-lənmiş şifrə yazılır
     }
-//
+
 //    @Override
 //    public List<UserResponseDto> getAllUsers() {
 //        List<User> users = userRepository.findAll();
@@ -61,19 +62,19 @@ public class UserServiceImpl implements UserService {
 //        return response;
 //    }
 
-//StreamApi     collection-dakı elementləri rahat, qısa və oxunaqlı şəkildə işləmək üçün istifadə olunur.
-    //@Override
-    //public List<UserResponseDto> getAllUsers() {
-    //    return userRepository.findAll()
-    //                         .stream()  // List<User> → Stream<User>
-    //                         .map(user -> new UserResponseDto(   //map → stream-dakı hər bir elementi başqa bir elementə çevirmək üçündür.lambda
-    //                             user.getId(),
-    //                             user.getUsername(),
-    //                             user.getEmail(),
-    //                             user.getRole()
-    //                         ))
-    //                         .toList(); // Stream → List<UserResponseDto>
-    //}
+////StreamApi     collection-dakı elementləri rahat, qısa və oxunaqlı şəkildə işləmək üçün istifadə olunur.
+//    @Override
+//    public List<UserResponseDto> getAllUsers() {
+//        return userRepository.findAll()
+//                             .stream()  // List<User> → Stream<User>
+//                             .map(user -> new UserResponseDto(   //map → stream-dakı hər bir elementi başqa bir elementə çevirmək üçündür.lambda
+//                                 user.getId(),
+//                                 user.getUsername(),
+//                                 user.getEmail(),
+//                                 user.getRole()
+//                             ))
+//                             .toList(); // Stream → List<UserResponseDto>
+//    }
 
 
 
@@ -85,6 +86,7 @@ public class UserServiceImpl implements UserService {
                 .map(user -> modelMapper.map(user, UserResponseDto.class))
                 .toList();
     }
+
 //modelMapper.map(user, UserResponseDto.class)
 //ModelMapper kitabxanası vasitəsilə User entity-sini UserResponseDto-ya avtomatik çevrir.
 //map() metodu:

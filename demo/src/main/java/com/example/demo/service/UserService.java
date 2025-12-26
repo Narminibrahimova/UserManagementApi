@@ -6,7 +6,7 @@ import com.example.demo.dto.response.UserResponseDto;
 import com.example.demo.entity.User;
 
 import java.util.List;
-
+//abstraksiya
 public interface UserService {
     UserResponseDto register (RegisterRequestDto request);
     List<UserResponseDto> getAllUsers();

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequestDto {
+    @NotBlank(message = "Username boş ola bilməz")
     private String username;
     private String password;
     @NotBlank(message = "Email boş ola bilməz")

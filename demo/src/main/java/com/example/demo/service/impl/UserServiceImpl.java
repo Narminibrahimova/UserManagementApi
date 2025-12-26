@@ -17,10 +17,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+//polimorfizm
 public class UserServiceImpl implements UserService {
+    //enkapsulyasiya
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    //modelmapper-entityni dtoya cevirmek ucun istifade olunur
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -29,17 +32,12 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Email already registered"); // ya da custom exception
         }
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setUsername(request.getUsername());//İstifadəçidən gələn requesti götürür və userin usernamesine elave edir yeni usernameni deyisir
         user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         user.setRole(Role.USER);
-        userRepository.save(user);
+        userRepository.save(user);//yenilədik və saxladıq
         return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
-   //İstifadəçi formu doldurur → username = “Ali”
-        //request.getUsername() → yazılan adı götürür
-        //user.setUsername() → istifadəçi obyektinə qoyur
-        //Sonra userRepository.save(user) çağıranda bu ad database-də saxlanır
-
         //İstifadəçi şifrə yazır → 12345
         //passwordEncoder.encode() → onu kilidləyir (hash) → $2a$10$...
         //user.setPassword() → database-ə hash-lənmiş şifrə yazılır
@@ -63,17 +61,17 @@ public class UserServiceImpl implements UserService {
 //        return response;
 //    }
 
-//StreamApi
+//StreamApi     collection-dakı elementləri rahat, qısa və oxunaqlı şəkildə işləmək üçün istifadə olunur.
     //@Override
     //public List<UserResponseDto> getAllUsers() {
     //    return userRepository.findAll()
     //                         .stream()  // List<User> → Stream<User>
-    //                         .map(user -> new UserResponseDto(
+    //                         .map(user -> new UserResponseDto(   //map → stream-dakı hər bir elementi başqa bir elementə çevirmək üçündür.lambda
     //                             user.getId(),
     //                             user.getUsername(),
     //                             user.getEmail(),
     //                             user.getRole()
-    //                         ))  // Stream<User> → Stream<UserResponseDto>
+    //                         ))
     //                         .toList(); // Stream → List<UserResponseDto>
     //}
 
@@ -87,7 +85,12 @@ public class UserServiceImpl implements UserService {
                 .map(user -> modelMapper.map(user, UserResponseDto.class))
                 .toList();
     }
-
+//modelMapper.map(user, UserResponseDto.class)
+//ModelMapper kitabxanası vasitəsilə User entity-sini UserResponseDto-ya avtomatik çevrir.
+//map() metodu:
+//İlk arqument → çevriləcək obyekt (user)
+//İkinci arqument → çevriləcək tip (UserResponseDto.class)
+//Bu üsul manual setUsername, setEmail və s. yazmaqdan qurtarır.
 
 
 

@@ -21,10 +21,10 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     //enkapsulyasiya
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     //modelmapper-entityni dtoya cevirmek ucun istifade olunur
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
     @Override
@@ -96,17 +96,38 @@ public class UserServiceImpl implements UserService {
 
 
 
+//    @Override
+//    public UserResponseDto login(LoginRequestDto request) {
+//       User user=userRepository.findByUsername(request.getUsername())
+//               .orElseThrow(() -> new RuntimeException("Username not found"));
+//
+//       if(!user.getPassword().equals(request.getPassword())){
+//            throw new RuntimeException("Wrong password");
+//       }
+//
+//       return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+//    }
+
     @Override
     public UserResponseDto login(LoginRequestDto request) {
-       User user=userRepository.findByUsername(request.getUsername())
-               .orElseThrow(() -> new RuntimeException("Username not found"));
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Username not found"));
 
-       if(!user.getPassword().equals(request.getPassword())){
+        if (!bCryptPasswordEncoder.matches(
+                request.getPassword(),
+                user.getPassword()
+        )) {
             throw new RuntimeException("Wrong password");
-       }
+        }
 
-       return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+        return new UserResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
+
 
     @Override
     public UserResponseDto getUserById(Long id) {
@@ -122,7 +143,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         if(request.getPassword()!=null && !request.getPassword().isEmpty()){
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         }
         userRepository.save(user);
         return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
